@@ -2,7 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-import UserRoute from "./routes/UserRoute.js"
+import UserRoutes from "./routes/UserRoutes.js"
+import CategoryRoutes from "./routes/CategoryRoutes.js"
 
 dotenv.config();
 
@@ -20,7 +21,8 @@ mongoose.connect(process.env.MONGO_URI, {
     console.log(err);
 });
 
-app.use("/api/auth", UserRoute);
+app.use("/api/auth", UserRoutes);
+app.use("/api/category", CategoryRoutes);
 
 // app.use("/", (req, res) => {
 //     res.send("Welcome to Ecommerce API with NodeJS and MongoDB!");
