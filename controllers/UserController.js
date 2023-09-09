@@ -1,5 +1,6 @@
 import UserModel from "../models/UserModel.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const registerUser = async (req, res) => {
     try {
@@ -170,10 +171,92 @@ const registerUser = async (req, res) => {
             message: error.message
         });
     }
-}
+};
 
+
+const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // email validation
+        if (!email) {
+            return res.status(400).json({
+                status: false,
+                message: "Email is required!"
+            });
+        }
+        // check if email is valid
+        const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({
+                status: false,
+                message: "Invalid email address!"
+            });
+        }
+
+        // password validation
+        if (!password) {
+            return res.status(400).json({
+                status: false,
+                message: "Password is required!"
+            });
+        }
+        // check if password is valid
+        const validPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+        if (!validPassword.test(password)) {
+            return res.status(400).json({
+                status: false,
+                message: "Password must contain at least one uppercase, one lowercase, one number and one special character!"
+            });
+        }
+
+        const user = await UserModel.findOne({ email });
+        if (!user) {
+            return res.status(401).json({
+                status: false,
+                message: "Invalid email or password!"
+            });
+        }
+
+        // check if password is correct
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        if (!isPasswordCorrect) {
+            return res.status(400).json({
+                status: false,
+                message: "Invalid email or password!"
+            });
+        }
+
+        // generate token
+        const token = jwt.sign(
+            { 
+                id: user._id
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "1d"
+            }
+        );
+
+        res.status(200).json({
+            status: true,
+            message: "User logged in successfully!",
+            data: {
+                userId: user._id,
+                token
+            }
+        });
+
+    } catch(error) {
+        res.status(500).json({
+            status: false,
+            message: error.message
+        });
+    }
+};
 
 
 export {
-    registerUser
+    registerUser,
+    loginUser
 }
