@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
+import UserRoute from "./routes/UserRoute.js"
+
 dotenv.config();
 
 const app = express();
@@ -18,9 +20,12 @@ mongoose.connect(process.env.MONGO_URI, {
     console.log(err);
 });
 
-app.use("/", (req, res) => {
-    res.send("Welcome to Ecommerce API with NodeJS and MongoDB!");
-});
+app.use("/api/auth", UserRoute);
+
+// app.use("/", (req, res) => {
+//     res.send("Welcome to Ecommerce API with NodeJS and MongoDB!");
+// });
+
 
 const PORT = 5000 || process.env.PORT;
 
