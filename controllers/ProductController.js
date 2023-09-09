@@ -139,7 +139,44 @@ const getAllProducts = async (req, res) => {
     }
 }
 
+
+// Get specific product by id
+const getProduct =  async (req, res) => {
+    try {
+        const { productId } = req.params;
+
+        // check if product id is valid
+        if (!mongoose.Types.ObjectId.isValid(productId)) {
+            return res.status(400).json({
+                status: false,
+                message: "Invalid Product ID!"
+            });
+        }
+
+        const product = await ProductModel.findOne({ _id: productId, isDeleted: false }).populate("categoryId");
+        if (!product) {
+            return res.status(404).json({
+                status: false,
+                message: "Product not found!"
+            });
+        }
+
+        res.status(200).json({
+            status: true,
+            message: "Product fetched successfully!",
+            data: product
+        })
+    } catch(error) {
+        res.status(500).json({
+            status: false,
+            message: error.message
+        });
+    }
+}
+
+
 export {
     createProduct,
-    getAllProducts
+    getAllProducts,
+    getProduct
 }
