@@ -23,9 +23,9 @@ const productSchema = new mongoose.Schema({
     },
     availability: {
         type: Boolean,
-        required: true
+        default: true
     },
-    category: {
+    categoryId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category",
         required: true
