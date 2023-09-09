@@ -55,7 +55,7 @@ const createCategory = async (req, res) => {
 // Get All Categories
 const getAllCategories = async (req, res) => {
     try {
-        const categories = await CategoryModel.find();
+        const categories = await CategoryModel.find({ isDeleted: false });
 
         res.status(200).json({
             status: true,

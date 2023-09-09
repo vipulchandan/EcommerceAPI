@@ -119,6 +119,27 @@ const createProduct = async (req, res) => {
     }
 }
 
+
+// Get All Products
+const getAllProducts = async (req, res) => {
+    try {
+        const products = await ProductModel.find({ isDeleted: false }).populate("categoryId");
+
+        res.status(200).json({
+            status: true,
+            message: "Products fetched successfully!",
+            data: products
+        });
+
+    } catch(error) {
+        res.status(500).json({
+            status: false,
+            message: error.message
+        });
+    }
+}
+
 export {
-    createProduct
+    createProduct,
+    getAllProducts
 }
