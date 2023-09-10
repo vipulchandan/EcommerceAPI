@@ -20,7 +20,7 @@
 
 ## Introduction
 
-Welcome to the E-commerce API Project with NodeJS and MongoDB! This web application provides a comprehensive set of APIs for managing an online store. It includes functionalities for user management, product management, and order processing.
+Welcome to the E-commerce API Project with NodeJS and MongoDB! This web application provides a comprehensive set of APIs for managing an online store. It includes functionalities for user management, category management, product management, cart management and order processing.
 
 ## Getting Started
 
