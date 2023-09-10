@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const cartSchema = new mongoose.Schema({
+const orderSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -30,6 +30,23 @@ const cartSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    orderDate: {
+        type: Date,
+        default: Date.now,
+    },
+    status: {
+        type: String,
+        enum: ['Placed', 'Shipped', 'Delivered'],
+        default: 'Placed',
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
+    deletedAt: {
+        type: Date,
+        default: null
+    }
 }, { timestamps: true });
 
-export default mongoose.model("Cart", cartSchema);
+export default mongoose.model("Order", orderSchema);

@@ -6,6 +6,7 @@ import UserRoutes from "./routes/UserRoutes.js";
 import CategoryRoutes from "./routes/CategoryRoutes.js";
 import ProductRoutes from "./routes/ProductRoutes.js";
 import CartRoutes from "./routes/CartRoutes.js";
+import OrderRoutes from "./routes/OrderRoutes.js";
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use("/api/auth", UserRoutes);
 app.use("/api/category", CategoryRoutes);
 app.use("/api/products", ProductRoutes);
 app.use("/api", CartRoutes);
+app.use("/api", OrderRoutes);
 
 // app.use("/", (req, res) => {
 //     res.send("Welcome to Ecommerce API with NodeJS and MongoDB!");

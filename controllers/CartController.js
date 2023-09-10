@@ -55,6 +55,13 @@ const addToCart =  async (req, res) => {
             });
         }
 
+        if (quantity <= 0) {
+            return res.status(400).json({
+                status: false,
+                message: "Quantity must be greater than 0!"
+            });
+        }
+
         // Check if product exists
         const product = await ProductModel.findOne({ _id: productId, availability: true, isDeleted: false });
         if (!product) {
@@ -72,26 +79,29 @@ const addToCart =  async (req, res) => {
                 items: [],
                 totalPrice: 0,
                 totalItems: 0,
+                totalQuantity: 0
             })
         }
 
         // Check if the product is already in the cart
         const existingCartItem = cart.items.find((item) => item.productId.toString() === productId);
         if (existingCartItem) {
-            // If the product already exists, update its quantity
+            // If the product already exists, update its quantity and total quantity
             existingCartItem.quantity += quantity;
+            cart.totalQuantity += quantity;
         } else {
-            // If it's a new product, add it to the cart
+            // If it's a new product, add it to the cart and update total quantity
             cart.items.push({
                 productId,
                 quantity
             });
+            cart.totalQuantity += quantity;
         }
 
         // Update total price and total items in the cart
         // cart.totalPrice = cart.items.reduce((total, item) => total + (item.productId.price * item.quantity), 0);
         cart.totalPrice += (product.price * quantity);
-        cart.totalItems += quantity;
+        cart.totalItems = cart.items.length;
 
         await cart.save();
 
@@ -207,6 +217,13 @@ const updateCart = async (req, res) => {
             });
         }
 
+        if (quantity <= 0) {
+            return res.status(400).json({
+                status: false,
+                message: "Quantity must be greater than 0!"
+            });
+        }
+
         // check if productId is valid
         if (!mongoose.Types.ObjectId.isValid(productId)) {
             return res.status(400).json({
@@ -234,8 +251,9 @@ const updateCart = async (req, res) => {
         }
 
         const oldQuantity = cartItem.quantity;
-        cart.totalItems += quantity - oldQuantity;
+        cart.totalItems = cart.items.length;
         cart.totalPrice += (quantity - oldQuantity) * product.price;
+        cart.totalQuantity += quantity - oldQuantity;
 
         cartItem.quantity = quantity;
 
@@ -331,10 +349,12 @@ const removeItemFromCart = async (req, res) => {
             });
         }
 
-        cart.totalItems -= cartItem.quantity;
         cart.totalPrice -= (cartItem.quantity * product.price);
-
+        cart.totalQuantity -= cartItem.quantity;
+        
         cart.items = cart.items.filter((item) => item.productId.toString() !== productId);
+        
+        cart.totalItems = cart.items.length;
 
         await cart.save();
 
