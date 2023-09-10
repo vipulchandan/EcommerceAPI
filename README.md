@@ -1,4 +1,3 @@
-```markdown
 # E-commerce Project
 
 ## Table of Contents
@@ -63,13 +62,13 @@ Before you begin, ensure you have met the following requirements:
    npm start
    ```
 
-The server should now be running at `http://localhost:3000`.
+The server should now be running at `http://localhost:5000`.
 
 ## Usage
 
 ### API Documentation
 
-You can access the API documentation using Swagger UI. Open your web browser and go to `http://localhost:3000/docs` to explore and test the API endpoints interactively.
+You can access the API documentation using Swagger UI. Open your web browser and go to `http://localhost:5000/docs` to explore and test the API endpoints interactively.
 
 ### Authentication
 
@@ -260,8 +259,3 @@ Some API endpoints require authentication using a Bearer token. To obtain a toke
 ## Contributing
 
 Contributions to this project are welcome. Feel free to open issues, submit pull requests, or suggest improvements to help make this project better.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-```
