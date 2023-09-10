@@ -4,7 +4,10 @@ import jwt from "jsonwebtoken";
 
 
 /*
-POST /api/auth/register
+- **Endpoint:**         /api/users/register
+- **Method:**           POST
+- **Description:**      Register a new user account.
+- **Authentication:**   Not required.
 */
 const registerUser = async (req, res) => {
     try {
@@ -178,6 +181,12 @@ const registerUser = async (req, res) => {
 };
 
 
+/* 
+- **Endpoint:**          /api/users/login
+- **Method:**            POST
+- **Description:**       Log in and obtain an authentication token.
+- **Authentication:**    Not required.
+*/
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
