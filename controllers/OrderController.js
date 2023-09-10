@@ -141,7 +141,7 @@ const getOrderHistory = async (req, res) => {
         }
 
         // find all orders for the user
-        const orders = await OrderModel.find({ userId });
+        const orders = await OrderModel.find({ userId, isDeleted: false });
 
         res.status(200).json({
             status: true,
@@ -156,7 +156,72 @@ const getOrderHistory = async (req, res) => {
     }
 }
 
+
+// Order Details: Create an endpoint that retrieves the detailed information of a specific order by its ID
+const getOrderDetails = async (req, res) => {
+    try {
+        const { userId, orderId } = req.params;
+        const userIdFromToken = req.userId;
+
+        // Check if userId is valid
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({
+                status: false,
+                message: "Invalid user id!"
+            });
+        }
+
+        // Check if user exists
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                status: false,
+                message: "User not found!"
+            });
+        }
+
+        // Check if the userId from params matches the userId from token
+        if (user._id.toString() !== userIdFromToken) {
+            return res.status(403).json({
+                status: false,
+                message: "Unauthorized access! You are not allowed to view the order details!"
+            });
+        }
+
+        // Check if orderId is valid
+        if (!mongoose.Types.ObjectId.isValid(orderId)) {
+            return res.status(400).json({
+                status: false,
+                message: "Invalid order id!"
+            });
+        }
+
+        const order = await OrderModel.findOne({ _id: orderId, userId, isDeleted: false }).populate("items.productId");
+        if (!order) {
+            return res.status(404).json({
+                status: false,
+                message: "Order not found!"
+            });
+        }
+
+        res.status(200).json({
+            status: true,
+            message: "Order details fetched successfully!",
+            data: order
+        });
+
+    } catch(error) {
+        res.status(500).json({
+            status: false,
+            message: error.message
+        });
+    }
+}
+
+
+
 export {
     placeOrder,
-    getOrderHistory
+    getOrderHistory,
+    getOrderDetails
 }
