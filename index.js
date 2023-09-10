@@ -24,6 +24,10 @@ mongoose.connect(process.env.MONGO_URI, {
     console.log(err);
 });
 
+app.get("/", (req, res) => {
+    res.send("Welcome to Ecommerce API with NodeJS and MongoDB!");
+})
+
 app.use("/api/auth", UserRoutes);
 app.use("/api/category", CategoryRoutes);
 app.use("/api/products", ProductRoutes);

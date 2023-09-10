@@ -141,7 +141,7 @@ const getOrderHistory = async (req, res) => {
         }
 
         // find all orders for the user
-        const orders = await OrderModel.find({ userId, isDeleted: false });
+        const orders = await OrderModel.find({ userId, isDeleted: false }).populate("items.productId").populate("userId");   
 
         res.status(200).json({
             status: true,
@@ -196,7 +196,7 @@ const getOrderDetails = async (req, res) => {
             });
         }
 
-        const order = await OrderModel.findOne({ _id: orderId, userId, isDeleted: false }).populate("items.productId");
+        const order = await OrderModel.findOne({ _id: orderId, userId, isDeleted: false }).populate("items.productId").populate("userId");
         if (!order) {
             return res.status(404).json({
                 status: false,
