@@ -3,7 +3,14 @@ import UserModel from "../models/UserModel.js";
 import ProductModel from "../models/ProductModel.js";
 import mongoose from "mongoose";
 
-// Add to Cart
+/* 
+- **Add to Cart
+
+- **Endpoint:**         /api/users/:userId/cart
+- **Method:**           POST
+- **Description:**      Add a product to the user's cart.
+- **Authentication:**   Bearer token required.
+*/
 const addToCart =  async (req, res) => {
     try {
         const { userId } = req.params;
@@ -121,7 +128,14 @@ const addToCart =  async (req, res) => {
 
 
 
-// Get cart summary details
+/* 
+- **Get cart summary details
+
+- **Endpoint:**         /api/users/:userId/cart
+- **Method:**           GET
+- **Description:**      Get the summary of the user's cart.
+- **Authentication:**   Bearer token required.
+*/
 const getCartSummary = async (req, res) => {
     try {
         const { userId } = req.params;
@@ -168,7 +182,14 @@ const getCartSummary = async (req, res) => {
 }
 
 
-// Update Cart quantities
+/* 
+- **Update Cart quantities
+
+- **Endpoint:**         /api/users/:userId/cart
+- **Method:**           PUT
+- **Description:**      Update the quantities of products in the user's cart.
+- **Authentication:**   Bearer token required.
+*/
 const updateCart = async (req, res) => {
     try {
         const { userId } = req.params;
@@ -274,7 +295,14 @@ const updateCart = async (req, res) => {
 
 
 
-// Remove items from cart
+/* 
+- **Remove items from cart
+
+- **Endpoint:**         /api/users/:userId/cart
+- **Method:**           DELETE
+- **Description:**      Remove one or more items from the user's cart.
+- **Authentication:**   Bearer token required.
+*/
 const removeItemFromCart = async (req, res) => {
     try {
         const { userId } = req.params;
