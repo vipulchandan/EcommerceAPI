@@ -121,9 +121,7 @@ Some API endpoints require authentication using a Bearer token. To obtain a toke
 - **Endpoint:** `/api/categories/create`
 - **Method:** POST
 - **Description:** Create a new product category.
-- **Authentication:** B
-
-earer token required.
+- **Authentication:** Not required.
 - **Request Body:**
   - `name` (string, required): Category name.
 - **Responses:**
@@ -161,7 +159,7 @@ earer token required.
 - **Endpoint:** `/api/products/create`
 - **Method:** POST
 - **Description:** Create a new product.
-- **Authentication:** Bearer token required.
+- **Authentication:** Not required.
 - **Request Body:**
   - `title` (string, required): Product title.
   - `price` (number, required): Product price.
