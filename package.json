@@ -5,8 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js",
-    "generate-swagger": "npx swagger-jsdoc -d swaggerConfig.js"
+    "start": "nodemon index.js"
   },
   "author": "Vipul Chandan",
   "license": "ISC",
