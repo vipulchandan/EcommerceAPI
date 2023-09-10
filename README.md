@@ -34,13 +34,13 @@ Before you begin, ensure you have met the following requirements:
 1. Clone the repository:
 
    ```shell
-   git clone <repository-url>
+   git clone https://github.com/vipulchandan/EcommerceAPI.git
    ```
 
 2. Navigate to the project directory:
 
    ```shell
-   cd e-commerce-project
+   cd EcommerceAPI
    ```
 
 3. Install the project dependencies:
