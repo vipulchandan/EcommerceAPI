@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
+import swaggerDocs from "./swaggerConfig.js";
+
 import UserRoutes from "./routes/UserRoutes.js";
 import CategoryRoutes from "./routes/CategoryRoutes.js";
 import ProductRoutes from "./routes/ProductRoutes.js";
@@ -29,18 +31,14 @@ app.get("/", (req, res) => {
 })
 
 app.use("/api/auth", UserRoutes);
-app.use("/api/category", CategoryRoutes);
+app.use("/api/categories", CategoryRoutes);
 app.use("/api/products", ProductRoutes);
 app.use("/api", CartRoutes);
 app.use("/api", OrderRoutes);
-
-// app.use("/", (req, res) => {
-//     res.send("Welcome to Ecommerce API with NodeJS and MongoDB!");
-// });
-
 
 const PORT = 5000 || process.env.PORT;
 
 app.listen(PORT, () => {
     console.log(`Server is flying on PORT ${PORT}`);
+    swaggerDocs(app, PORT);
 });
