@@ -2,7 +2,13 @@ import mongoose from "mongoose";
 import ProductModel from "../models/ProductModel.js";
 import CategoryModel from "../models/CategoryModel.js";
 
-// Create Product
+
+/*
+- **Endpoint:**         /api/products/create
+- **Method:**           POST
+- **Description:**      Create a new product.
+- **Authentication:**   Not required.
+*/
 const createProduct = async (req, res) => {
     try {
         const { title, price, description, availability, categoryId } = req.body;
@@ -120,7 +126,13 @@ const createProduct = async (req, res) => {
 }
 
 
-// Get All Products
+
+/*
+- **Endpoint:**         /api/products
+- **Method:**           GET
+- **Description:**      Get a list of products.
+- **Authentication:**   Not required.
+*/
 const getAllProducts = async (req, res) => {
     try {
         const products = await ProductModel.find({ isDeleted: false }).populate("categoryId");
@@ -140,7 +152,13 @@ const getAllProducts = async (req, res) => {
 }
 
 
-// Get specific product by id
+
+/* 
+- **Endpoint:**         /api/products/:productId
+- **Method:**           GET
+- **Description:**      Get product details by ID.
+- **Authentication:**   Not required.
+*/
 const getProduct =  async (req, res) => {
     try {
         const { productId } = req.params;
