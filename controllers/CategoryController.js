@@ -2,7 +2,12 @@ import mongoose from "mongoose";
 import CategoryModel from "../models/CategoryModel.js";
 
 
-// Create Category
+/* 
+- **Endpoint:**         /api/categories/create
+- **Method:**           POST
+- **Description:**      Create a new product category.
+- **Authentication:**   Not required.
+*/
 const createCategory = async (req, res) => {
     try {
         const { name, description } = req.body;
@@ -52,7 +57,13 @@ const createCategory = async (req, res) => {
 }
 
 
-// Get All Categories
+
+/* 
+- **Endpoint:**         /api/categories
+- **Method:**           GET
+- **Description:**      Get a list of product categories.
+- **Authentication:**   Not required.
+*/
 const getAllCategories = async (req, res) => {
     try {
         const categories = await CategoryModel.find({ isDeleted: false });
@@ -71,7 +82,13 @@ const getAllCategories = async (req, res) => {
 }
 
 
-// Get Category
+
+/* 
+- **Endpoint:**         /api/categories/:categoryId
+- **Method:**           GET
+- **Description:**      Get category details by ID.
+- **Authentication:**   Not required.
+*/
 const getCategory = async (req, res) => {
     try {
         const { categoryId } = req.params;
