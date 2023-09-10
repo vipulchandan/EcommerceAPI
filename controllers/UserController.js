@@ -2,6 +2,10 @@ import UserModel from "../models/UserModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+
+/*
+POST /api/auth/register
+*/
 const registerUser = async (req, res) => {
     try {
         const { name, email, phone, password, address } = req.body;
