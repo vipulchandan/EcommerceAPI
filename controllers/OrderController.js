@@ -3,7 +3,15 @@ import OrderModel from "../models/OrderModel.js";
 import CartModel from "../models/CartModel.js";
 import UserModel from "../models/UserModel.js";
 
-// Order Placement: Create an endpoint to handle order placement, allowing users to place an order with products from their cart.
+
+/* 
+- Order Placement: Create an endpoint to handle order placement, allowing users to place an order with products from their cart.
+
+- **Endpoint:**         /api/users/:userId/orders
+- **Method:**           POST
+- **Description:**      Place an order with products from the user's cart.
+- **Authentication:**   Bearer token required
+*/
 const placeOrder = async (req, res) => {
     try {
         const { userId } = req.params;
@@ -109,7 +117,14 @@ const placeOrder = async (req, res) => {
 
 
 
-// Order History: Implement an endpoint to fetch the order history for authenticated users
+/* 
+- Order History: Implement an endpoint to fetch the order history for authenticated users
+
+- **Endpoint:**         /api/users/:userId/orders
+- **Method:**           GET
+- **Description:**      Get the order history for an authenticated user.
+- **Authentication:**   Bearer token required.
+*/
 const getOrderHistory = async (req, res) => {
     try {
         const { userId } = req.params;
@@ -157,7 +172,14 @@ const getOrderHistory = async (req, res) => {
 }
 
 
-// Order Details: Create an endpoint that retrieves the detailed information of a specific order by its ID
+/* 
+- Order Details: Create an endpoint that retrieves the detailed information of a specific order by its ID
+
+- **Endpoint:**         /api/users/:userId/orders/:orderId
+- **Method:**           GET
+- **Description:**      Get detailed information about a specific order by ID.
+- **Authentication:**   Bearer token required.
+*/
 const getOrderDetails = async (req, res) => {
     try {
         const { userId, orderId } = req.params;
