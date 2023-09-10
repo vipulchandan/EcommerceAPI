@@ -1,4 +1,4 @@
-# E-commerce Project
+# E-commerce API with NodeJS and MongoDB
 
 ## Table of Contents
 
@@ -11,14 +11,16 @@
    - [Authentication](#authentication)
 4. [API Endpoints](#api-endpoints)
    - [User Management](#user-management)
+   - [Category Management](#category-management)
    - [Product Management](#product-management)
+   - [Cart Management](#cart-management)
    - [Order Management](#order-management)
 5. [Contributing](#contributing)
 6. [License](#license)
 
 ## Introduction
 
-Welcome to the E-commerce Project! This web application provides a comprehensive set of APIs for managing an online store. It includes functionalities for user management, product management, and order processing.
+Welcome to the E-commerce API Project with NodeJS and MongoDB! This web application provides a comprehensive set of APIs for managing an online store. It includes functionalities for user management, product management, and order processing.
 
 ## Getting Started
 
@@ -112,38 +114,51 @@ Some API endpoints require authentication using a Bearer token. To obtain a toke
   - 401: Unauthorized, invalid credentials.
   - 500: Internal server error.
 
-#### Get User Profile
+### Category Management
 
-- **Endpoint:** `/api/users/profile`
-- **Method:** GET
-- **Description:** Get user profile information.
-- **Authentication:** Bearer token required.
-- **Responses:**
-  - 200: User profile retrieved successfully.
-  - 401: Unauthorized, token not provided or invalid token.
-  - 500: Internal server error.
+#### Create a New Category
 
-#### Update User Profile
+- **Endpoint:** `/api/categories/create`
+- **Method:** POST
+- **Description:** Create a new product category.
+- **Authentication:** B
 
-- **Endpoint:** `/api/users/profile`
-- **Method:** PUT
-- **Description:** Update user profile information.
-- **Authentication:** Bearer token required.
+earer token required.
 - **Request Body:**
-  - `name` (string, optional): New user name.
-  - `email` (string, optional): New user email.
-  - `password` (string, optional): New user password.
+  - `name` (string, required): Category name.
 - **Responses:**
-  - 200: User profile updated successfully.
+  - 201: Category created successfully.
   - 400: Bad request, missing or invalid data.
   - 401: Unauthorized, invalid token.
+  - 500: Internal server error.
+
+#### Get a List of Categories
+
+- **Endpoint:** `/api/categories`
+- **Method:** GET
+- **Description:** Get a list of product categories.
+- **Authentication:** Not required.
+- **Responses:**
+  - 200: Categories retrieved successfully.
+  - 500: Internal server error.
+
+#### Get Category Details by ID
+
+- **Endpoint:** `/api/categories/:categoryId`
+- **Method:** GET
+- **Description:** Get category details by ID.
+- **Authentication:** Not required.
+- **Responses:**
+  - 200: Category details retrieved successfully.
+  - 400: Bad request, invalid category ID.
+  - 404: Category not found.
   - 500: Internal server error.
 
 ### Product Management
 
 #### Create a New Product
 
-- **Endpoint:** `/api/products`
+- **Endpoint:** `/api/products/create`
 - **Method:** POST
 - **Description:** Create a new product.
 - **Authentication:** Bearer token required.
@@ -155,8 +170,6 @@ Some API endpoints require authentication using a Bearer token. To obtain a toke
   - `categoryId` (string, required): Product category ID.
 - **Responses:**
   - 201: Product created successfully.
-
-
   - 400: Bad request, missing or invalid data.
   - 401: Unauthorized, invalid token.
   - 500: Internal server error.
@@ -183,31 +196,71 @@ Some API endpoints require authentication using a Bearer token. To obtain a toke
   - 404: Product not found.
   - 500: Internal server error.
 
-#### Update Product Details by ID
+### Cart Management
 
-- **Endpoint:** `/api/products/:productId`
-- **Method:** PUT
-- **Description:** Update product details by ID.
+#### Add a Product to the Cart
+
+- **Endpoint:** `/api/users/:userId/cart`
+- **Method:** POST
+- **Description:** Add a product to the user's cart.
 - **Authentication:** Bearer token required.
-- **Request Body:** Any valid product fields you want to update.
+- **Request Body:**
+  - `productId` (string, required): ID of the product to add.
+  - `quantity` (number, required): Quantity of the product to add.
 - **Responses:**
-  - 200: Product details updated successfully.
-  - 400: Bad request, invalid product ID or data.
+  - 201: Product added to the cart successfully.
+  - 400: Bad request, missing or invalid data.
   - 401: Unauthorized, invalid token.
-  - 404: Product not found.
+  - 403: Unauthorized access.
+  - 404: User or product not found.
   - 500: Internal server error.
 
-#### Delete a Product by ID
+#### Get Cart Summary
 
-- **Endpoint:** `/api/products/:productId`
-- **Method:** DELETE
-- **Description:** Delete a product by ID.
+- **Endpoint:** `/api/users/:userId/cart`
+- **Method:** GET
+- **Description:** Get the summary of the user's cart.
 - **Authentication:** Bearer token required.
 - **Responses:**
-  - 200: Product deleted successfully.
-  - 400: Bad request, invalid product ID.
+  - 200: Cart summary fetched successfully.
   - 401: Unauthorized, invalid token.
-  - 404: Product not found.
+  - 403: Unauthorized access.
+  - 404: User or cart not found.
+  - 500: Internal server error.
+
+#### Update Cart Item Quantities
+
+- **Endpoint:** `/api/users/:userId/cart`
+- **Method:** PUT
+- **Description:** Update the quantities of products in the user's cart.
+- **Authentication:** Bearer token required.
+- **Request Body:**
+  - `items` (array, required): An array of objects representing cart items with updated quantities.
+    - `productId` (string, required): ID of the product to update.
+    - `quantity` (number, required): New quantity of the product.
+- **Responses:**
+  - 200: Cart updated successfully.
+  - 400: Bad request, missing or invalid data.
+  - 401: Unauthorized, invalid token.
+  - 403: Unauthorized access.
+  - 404: User, cart, or product not found.
+  - 500: Internal server error.
+
+#### Remove an Item from the Cart
+
+- **Endpoint:** `/api/users/:userId/cart`
+- **Method:** DELETE
+- **Description:** Remove one or more items from the user's cart.
+- **Authentication:** Bearer token required.
+- **Request Body:**
+  - `items` (array, required): An array of objects representing cart items to remove.
+    - `productId` (string, required): ID of the product to remove.
+- **Responses:**
+  - 200: Item(s) removed from the cart successfully.
+  - 400: Bad request, missing or invalid data.
+  - 401: Unauthorized, invalid token.
+  - 403: Unauthorized access.
+  - 404: User, cart, or product not found.
   - 500: Internal server error.
 
 ### Order Management
