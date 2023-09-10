@@ -31,10 +31,9 @@ const addToCart =  async (req, res) => {
                 status: false,
                 message: "Unauthorized access! You are not the owner of this cart!"
             });
-        }
+        }  
 
-        
-
+        // productId validation
         if (!productId) {
             return res.status(400).json({
                 status: false,
@@ -48,6 +47,7 @@ const addToCart =  async (req, res) => {
                 message: "Invalid product id!"
             });
         }
+        // quantity validation
         if (!quantity) {
             return res.status(400).json({
                 status: false,
@@ -111,6 +111,53 @@ const addToCart =  async (req, res) => {
 
 
 
+// Get cart summary details
+const getCartSummary = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const userIdFromToken = req.userId;
+
+        // Check if userId is valid
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({
+                status: false,
+                message: "Invalid user id!"
+            });
+        }
+
+        // Check if user exists
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                status: false,
+                message: "User not found!"
+            });
+        }
+
+        // Check if the userId from params matches the userId from token
+        if (user._id.toString() !== userIdFromToken) {
+            return res.status(403).json({
+                status: false,
+                message: "Unauthorized access! You are not the owner of this cart!"
+            });
+        }
+
+        const cart = await CartModel.findOne({ userId }).populate("items.productId");
+
+        res.status(200).json({
+            status: true,
+            message: "Cart summary fetched successfully!",
+            data: cart
+        });
+    } catch(error) {
+        res.status(500).json({
+            status: false,
+            message: error.message
+        });
+    }
+}
+
 export {
-    addToCart
+    addToCart,
+    getCartSummary
 }
