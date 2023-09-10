@@ -18,7 +18,7 @@ const addToCart =  async (req, res) => {
             });
         }
         // Check if user exists
-        const user = await UserModel.findOne({ _id: userId });
+        const user = await UserModel.findById(userId);
         if (!user) {
             return res.status(404).json({
                 status: false,
@@ -157,7 +157,106 @@ const getCartSummary = async (req, res) => {
     }
 }
 
+
+// Update Cart quantities
+const updateCart = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { productId, quantity } = req.body;
+        const userIdFromToken = req.userId;
+
+        // Check if userId is valid
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({
+                status: false,
+                message: "Invalid user id!"
+            });
+        }
+
+        // Check if user exists
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                status: false,
+                message: "User not found!"
+            });
+        }
+
+        // Check if the userId from params matches the userId from token
+        if (user._id.toString() !== userIdFromToken) {
+            return res.status(403).json({
+                status: false,
+                message: "Unauthorized access! You are not the owner of this cart!"
+            });
+        }
+
+        // check if cart exists
+        const cart = await CartModel.findOne({ userId });
+        if (!cart) {
+            return res.status(404).json({
+                status: false,
+                message: "Cart not found!"
+            });
+        }
+
+        // productId validation
+        if (!productId) {
+            return res.status(400).json({
+                status: false,
+                message: "Product id is required!"
+            });
+        }
+
+        // check if productId is valid
+        if (!mongoose.Types.ObjectId.isValid(productId)) {
+            return res.status(400).json({
+                status: false,
+                message: "Invalid product id!"
+            });
+        }
+
+        // check if product exists
+        const product = await ProductModel.findOne({ _id: productId, availability: true, isDeleted: false });
+        if (!product) {
+            return res.status(404).json({
+                status: false,
+                message: "Product not found!"
+            });
+        }
+
+        // Check if the Item exists
+        const cartItem = cart.items.find((item) => item.productId.toString() === productId);
+        if (!cartItem) {
+            return res.status(404).json({
+                status: false,
+                message: "Item not found!"
+            });
+        }
+
+        const oldQuantity = cartItem.quantity;
+        cart.totalItems += quantity - oldQuantity;
+        cart.totalPrice += (quantity - oldQuantity) * product.price;
+
+        cartItem.quantity = quantity;
+
+        await cart.save();
+
+        res.status(200).json({
+            status: true,
+            message: "Cart updated successfully!",
+            data: cart
+        });
+    } catch(error) {
+        res.status(500).json({
+            status: false,
+            message: error.message
+        });
+    }
+}
+
+
 export {
     addToCart,
-    getCartSummary
+    getCartSummary,
+    updateCart
 }
